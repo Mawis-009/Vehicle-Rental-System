@@ -7,6 +7,24 @@ require_once '../includes/db.php';
 require_once '../includes/functions.php';
 requireAdmin();
 
+// Handle Delete User
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user_id'])) {
+    $delete_user_id = (int)$_POST['delete_user_id'];
+    try {
+        $stmt = $conn->prepare("DELETE FROM users WHERE id = ? AND role != 'admin'");
+        $stmt->bind_param("i", $delete_user_id);
+        if ($stmt->execute()) {
+            setFlash('success', "User deleted successfully.");
+        } else {
+            setFlash('error', "Failed to delete user.");
+        }
+        $stmt->close();
+    } catch (mysqli_sql_exception $e) {
+        setFlash('error', "Cannot delete user. They have associated records (bookings, payments) in the system.");
+    }
+    redirect('users.php');
+}
+
 // Handle status update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['action'])) {
     $user_id = (int)$_POST['user_id'];
@@ -92,6 +110,10 @@ $users = $conn->query("SELECT * FROM users WHERE role = 'user' ORDER BY created_
                                                     <input type="hidden" name="action" value="active">
                                                     <button type="submit" class="btn btn-sm btn-success">Enable</button>
                                                 <?php endif; ?>
+                                            </form>
+                                            <form method="POST" action="users.php" class="d-inline" onsubmit="return confirm('Delete this user permanently?');">
+                                                <input type="hidden" name="delete_user_id" value="<?php echo $u['id']; ?>">
+                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                             </form>
                                         </div>
                                     </td>
