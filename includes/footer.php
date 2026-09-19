@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <?php echo date('Y'); ?> <?php echo SITE_NAME; ?>. All rights reserved. | BCA University 4th Sem Project - I</p>
+                <p>&copy; <?php echo date('Y'); ?> <?php echo SITE_NAME; ?>. All rights reserved. | BCA University 4th Sem Project - I hello</p>
             </div>
         </div>
     </footer>
