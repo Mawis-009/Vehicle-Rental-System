@@ -94,13 +94,13 @@ require_once 'includes/header.php';
                 <div class="card-body">
                     <ul class="nav nav-tabs payment-tabs mb-4">
                         <li class="nav-item">
-                            <a class="nav-link payment-tab active" href="#" onclick="switchPaymentTab(event, 'esewa')">eSewa</a>
+                            <a class="nav-link payment-tab active" href="#" onclick="changePaymentTab(event, 'esewa')">eSewa</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link payment-tab" href="#" onclick="switchPaymentTab(event, 'khalti')">Khalti</a>
+                            <a class="nav-link payment-tab" href="#" onclick="changePaymentTab(event, 'khalti')">Khalti</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link payment-tab" href="#" onclick="switchPaymentTab(event, 'card')">Credit/Debit Card</a>
+                            <a class="nav-link payment-tab" href="#" onclick="changePaymentTab(event, 'card')">Credit/Debit Card</a>
                         </li>
                     </ul>
 
@@ -178,7 +178,7 @@ require_once 'includes/header.php';
 
 <script src="js/card-validation.js"></script>
 <script>
-function switchPaymentTab(e, tabId) {
+function changePaymentTab(e, tabId) {
     e.preventDefault();
     
     document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));

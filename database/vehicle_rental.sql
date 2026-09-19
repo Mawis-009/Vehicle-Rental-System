@@ -1,8 +1,3 @@
--- ============================================================
--- Vehicle Rental System - Database Schema
--- Compatible with MySQL 5.7+ / MariaDB 10.3+
--- ============================================================
-
 -- Create and select the database
 CREATE DATABASE IF NOT EXISTS vehicle_rental
     CHARACTER SET utf8mb4
@@ -10,10 +5,7 @@ CREATE DATABASE IF NOT EXISTS vehicle_rental
 
 USE vehicle_rental;
 
--- ============================================================
--- 1. USERS TABLE
--- Stores both regular users and admin accounts
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
@@ -30,10 +22,6 @@ CREATE TABLE IF NOT EXISTS users (
     INDEX idx_users_status (status)
 ) ENGINE=InnoDB;
 
--- ============================================================
--- 2. CATEGORIES TABLE
--- Vehicle categories (Two-Wheeler / Four-Wheeler subtypes)
--- ============================================================
 CREATE TABLE IF NOT EXISTS categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
@@ -45,10 +33,6 @@ CREATE TABLE IF NOT EXISTS categories (
     INDEX idx_categories_slug (slug)
 ) ENGINE=InnoDB;
 
--- ============================================================
--- 3. VEHICLES TABLE
--- All rental vehicles with category reference
--- ============================================================
 CREATE TABLE IF NOT EXISTS vehicles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
@@ -70,10 +54,6 @@ CREATE TABLE IF NOT EXISTS vehicles (
         ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
--- ============================================================
--- 4. BOOKINGS TABLE
--- Rental bookings linking users to vehicles
--- ============================================================
 CREATE TABLE IF NOT EXISTS bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -100,10 +80,6 @@ CREATE TABLE IF NOT EXISTS bookings (
         ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
--- ============================================================
--- 5. PAYMENTS TABLE
--- Payment records for each booking
--- ============================================================
 CREATE TABLE IF NOT EXISTS payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL,
@@ -127,10 +103,6 @@ CREATE TABLE IF NOT EXISTS payments (
         ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
--- ============================================================
--- 6. TRANSACTIONS TABLE
--- Complete transaction history / audit log
--- ============================================================
 CREATE TABLE IF NOT EXISTS transactions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL,
@@ -158,27 +130,13 @@ CREATE TABLE IF NOT EXISTS transactions (
 ) ENGINE=InnoDB;
 
 
--- ============================================================
--- SEED DATA
--- ============================================================
-
--- ------------------------------------------------------------
--- Admin User
--- Email: anish206195@gmail.com | Password: anish@123
--- ------------------------------------------------------------
 INSERT INTO users (full_name, email, phone, address, password, role, status) VALUES
 ('Anish Admin', 'anish206195@gmail.com', '9800000000', 'Kathmandu, Nepal', '$2y$10$zwV/1FwftFRwMWeMBd7/5eZHIjXDwNVBj7hmyW8xDMjhoGCY72ola', 'admin', 'active');
 
--- ------------------------------------------------------------
--- Sample Users (Password for both: user@123)
--- ------------------------------------------------------------
 INSERT INTO users (full_name, email, phone, address, password, role, status) VALUES
 ('Ram Sharma', 'ram@example.com', '9812345678', 'Pokhara, Nepal', '$2y$10$BxA/cTqs1tuZmd0rsNDUfOkCV0TT/m3NwqBaltBNUis.QQt4FZYBO', 'user', 'active'),
 ('Sita Thapa', 'sita@example.com', '9823456789', 'Lalitpur, Nepal', '$2y$10$BxA/cTqs1tuZmd0rsNDUfOkCV0TT/m3NwqBaltBNUis.QQt4FZYBO', 'user', 'active');
 
--- ------------------------------------------------------------
--- Vehicle Categories
--- ------------------------------------------------------------
 INSERT INTO categories (name, slug, description, type) VALUES
 ('Motorcycle', 'motorcycle', 'Standard motorcycles for city and highway travel', 'two-wheeler'),
 ('Scooter', 'scooter', 'Easy-to-ride scooters for daily commute', 'two-wheeler'),
@@ -187,24 +145,16 @@ INSERT INTO categories (name, slug, description, type) VALUES
 ('Jeep', 'jeep', 'Rugged jeeps for off-road and mountain trips', 'four-wheeler'),
 ('Van', 'van', 'Spacious vans for group travel and cargo', 'four-wheeler');
 
--- ------------------------------------------------------------
--- Sample Vehicles
--- ------------------------------------------------------------
 INSERT INTO vehicles (category_id, name, vehicle_number, brand, model_year, price_per_day, description, image, status) VALUES
--- Two-Wheelers
 (1, 'Pulsar NS200', 'BA 1 PA 2024', 'Bajaj', 2023, 1500.00, 'A powerful 200cc motorcycle perfect for city rides and short trips. Features ABS braking and digital console.', 'pulsar_ns200.jpg', 'available'),
 (1, 'Apache RTR 160', 'BA 2 PA 3045', 'TVS', 2024, 1200.00, 'Sporty 160cc motorcycle with excellent fuel efficiency and smooth handling.', 'apache_rtr160.jpg', 'available'),
 (2, 'Honda Activa 6G', 'BA 3 PA 5567', 'Honda', 2023, 800.00, 'Indias most trusted scooter. Easy to ride with great mileage and comfort.', 'activa_6g.jpg', 'available'),
 (2, 'Dio 125', 'BA 4 PA 6789', 'Honda', 2024, 900.00, 'Stylish and sporty scooter with excellent pick-up and modern features.', 'dio_125.jpg', 'available'),
 (3, 'Ather 450X', 'BA 5 PA 1122', 'Ather', 2024, 1000.00, 'Premium electric scooter with fast charging, connected features, and 85 km range.', 'ather_450x.jpg', 'available'),
 
--- Four-Wheelers
 (4, 'Swift Dzire', 'BA 1 JA 2233', 'Maruti Suzuki', 2023, 3500.00, 'Compact sedan with spacious interiors, great mileage, and smooth automatic transmission.', 'swift_dzire.jpg', 'available'),
 (4, 'Honda City', 'BA 2 JA 4455', 'Honda', 2024, 4500.00, 'Premium sedan with advanced safety features, sunroof, and powerful engine.', 'honda_city.jpg', 'available'),
 (5, 'Mahindra Thar', 'BA 3 JA 6677', 'Mahindra', 2023, 5000.00, 'Rugged off-road SUV with 4x4 capability, perfect for mountain adventures.', 'mahindra_thar.jpg', 'available'),
 (5, 'Scorpio N', 'BA 4 JA 8899', 'Mahindra', 2024, 4800.00, 'Powerful SUV with seating for 7, ideal for family road trips and off-road trails.', 'scorpio_n.jpg', 'available'),
 (6, 'Toyota HiAce', 'BA 5 JA 1010', 'Toyota', ' 2022', 6000.00, 'Spacious 15-seater van perfect for group travel, tours, and events.', 'toyota_hiace.jpg', 'available');
 
--- ============================================================
--- END OF SCHEMA
--- ============================================================
